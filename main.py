@@ -1,21 +1,16 @@
+from dotenv import load_dotenv
 from fastapi import FastAPI
-from pydantic import BaseModel
+
+from models import WhatsappRequestBody
+from services import MessageSubmissionService
+
+load_dotenv()
 
 app = FastAPI()
 
 
-class RequestBody(BaseModel):
-    class Config:
-        extra = "allow"
-
-
 @app.post("/messages-upsert")
-async def messages_upsert(body: RequestBody):
+async def messages_upsert(body: WhatsappRequestBody):
     print(body.model_dump())
-    return body.model_dump()
-
-
-@app.post("/send-message")
-async def send_message(body: RequestBody):
-    print(body.model_dump())
+    MessageSubmissionService().kickoff_interaction(body)
     return body.model_dump()
