@@ -14,3 +14,8 @@ async def messages_upsert(body: WhatsappRequestBody):
     print(body.model_dump())
     MessageSubmissionService().kickoff_interaction(body)
     return body.model_dump()
+
+
+@app.get("/health")
+async def healthcheck():
+    return {"status": "ok"}
